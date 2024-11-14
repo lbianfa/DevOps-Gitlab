@@ -91,3 +91,71 @@ En términos técnicos, la fusión consiste en unir dos ramas en una, alineando 
 
 En el siguiente diagrama puede ver un ejemplo de un repositorio que fue ramificado desde la rama main por dos ramas más llamadas Andres y Fabian, y como al final de la rama Fabian realiza un merge con la rama main.
 ![Branching&Mergin](https://res.cloudinary.com/dmvqwbpht/image/upload/v1731448474/Gitlab/branching_merging_wcu1mk.png)
+
+## Resolución de conflictos
+
+En cualquier trabajo en equipo es normal que surjan conflictos, en este caso son conflictos técnicos que surgen luego de que dos o más integrantes del equipo modifiquen las mismas líneas de un mismo archivo y uno logre realizar el merge a la rama principal antes de que el otro integrante lo haga, en el siguiente diagrama se puede ver un ejemplo de cuando puede ocurre un conflicto:
+![GitConflict](https://res.cloudinary.com/dmvqwbpht/image/upload/v1731548827/Gitlab/git_conflict_otruwv.png)
+
+Los conflictos se resuelven aceptando el cambio entrante o conservando el cambio actual, lo cual podemos abordar directamente desde GitLab o desde un editor de texto como VSCode.
+
+## Creación de scripts de CI/CD
+Antes de empezar a crear y ejecutar scripts en GitLab, definamos los siguientes conceptos:
+
+### Script:
+Es un conjunto de instrucciones o comandos que se escriben en un archivo y que son ejecutados de forma automática por un intérprete o programa, es decir, no requieren de un proceso de compilación. Están diseñados para realizar tareas concretas y específicas, sin necesidad de una estructura o entorno complejo que muchos lenguajes de programaciones convencionales sí necesitan. Son idealeas para entornos donde la rapidez y simplicidad de ejecución es prioritaria, como la automatización de tareas.
+
+Los scripts se pueden ejecutar en varios lenguajes como:
+
+- Javascript
+- Python
+- Bash
+- Powershell
+
+Estos 2 últimos son intérpretes de terminal o Shell.
+
+### Shell:
+Es una interfaz que permite a los usuarios interactuar con el sistema operativo. Es una de software que **interpreta** los comandos que el usuario escribe y los traduce en acciones que el sistema puede ejecutar. En otras palabras, la Shell actúa como intermediario entre el usuario y el sistema operativo.
+
+Existen principalmente dos tipos de shell:
+
+- **Shell de línea de comandos (CLI):** Esta es una interfaz de texto en la que el usuario escribe comandos para interactuar con el sistema operativo. Como por ejemplo PowerShell (Windows) y Bash (Linux)
+- Shell gráfica (GUI): Es una interfaz visual que permite a los usuarios interactuar con el sistema operativo a través de ventanas, íconos y menús.
+
+Sabiendo entonces que es un script y que es una shell, podemos entender ahora que los jobs de GitLab pueden ejecutar **scripts de shell**, como por ejemplo: `echo "hola mundo"`
+
+### Mi primer job en GitLab
+Sabiendo entonces que podemos ejecutar scripts de shell, vamos a crear nuestro primer job, para eso debemos, en la raíz de nuestro repositorio de GitLab, crear un archivo con el siguiente nombre y formato **.gitlab-ci.yml**, con el siguiente contenido:
+
+```
+mi_job:
+  script:
+    - echo "Mi primer script se ejecutó correctamente"
+```
+
+#### ¿Se puede ejecutar Python desde la shell de un Job de GitLab? Sí
+La mayoría de cosas que se puedan ejecutar desde una shell también se pueden ejecutar desde un job de GitLab, ya que este se ejecuta con una shell, para ejecutar Python, su archivo **.gitlab-ci.yml** debe contener el siguiente código de ejemplo:
+
+```
+mi_job:
+  script:
+    - apt-get update
+    - apt-get install -y python3 python3-pip
+    - python3 ./my-script.py
+    - echo "Mi primer script se ejecutó correctamente"
+```
+
+Como podemos notar, primero instalamos el intérprete de Python para luego ejecutar nuestro archivo de Python, y así nos toca instalar todos los programas y dependencias en nuestra shell para ejecutar los comandos que necesitemos. Pero esto puede llegar a ser tedioso y poco práctico, por eso GitLab nos permite indicar una imagen de [DockerHub](https://hub.docker.com/)  para iniciar con una shell que ya cuente con todo lo necesario para ejecutar los comandos, como por ejemplo:
+
+```
+mi_job:
+  image: python:3.9
+  script:
+    - python3 ./my-script.py
+    - echo "Mi primer script se ejecutó correctamente"
+```
+
+De esta manera, nuestro job va a iniciar con una shell en la que Python ya se encuentra instalado y solo necesitemos indicar los comandos de Python que queramos ejecutar.
+
+## Despliegue automatizado (CD)
+
