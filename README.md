@@ -138,9 +138,10 @@ La mayoría de cosas que se puedan ejecutar desde una shell también se pueden e
 
 ```
 mi_job:
-  script:
+  before_script:
     - apt-get update
     - apt-get install -y python3 python3-pip
+  script:
     - python3 ./my-script.py
     - echo "Mi primer script se ejecutó correctamente"
 ```
@@ -157,5 +158,75 @@ mi_job:
 
 De esta manera, nuestro job va a iniciar con una shell en la que Python ya se encuentra instalado y solo necesitemos indicar los comandos de Python que queramos ejecutar.
 
-## Despliegue automatizado (CD)
+GitLab toma la imagen de Ruby cuando no se indica el atributo image.
 
+## Despliegue automatizado
+
+Es el proceso de implementar o actualizar aplicaciones, sitios web o servicios en un entorno de producción o de prueba de forma automática, sin intervención manual. Esta automatización se realiza utilizando herramientas de integración y entrega continuar (CI/CD) que se configuran para ejecutar una serie de pasos que toman el código más reciente y lo despliegan directamente en el entorno deseado.
+
+Antes de ver un ejemplo práctico, vamos a ver en que consiste un artefacto.
+
+### Artefacto
+En GitLab CI/CD, un artefacto es un archivo o conjunto de archivos generados por un job que se guardan y están disponibles para otros trabajos dentro del mismo pipeline o para descargar después de que el pipeline termina. Estos archivos suelen ser el resultado de un proceso de construcción o compilación, como binarios, archivos empaquetados, reportes de pruebas, documentación generada, entre otros.
+
+El siguiente código es un ejemplo de artefactos en GitLab:
+
+```
+run_compilation:
+  stage: build
+  script:
+    - echo "Compilando..."
+    - mkdir build
+    - echo "Este es un artefacto ficticio" > build/somefile.txt
+  artifacts:
+  paths:
+    - build
+
+test_file:
+  stage: test
+  dependencies: #Importante establecer que este job dependa del que genera el artefacto, para que lo espere
+    - run_compilation
+  script:
+    - cat build/somefile.txt
+  artifacts:
+  paths:
+    - build
+```
+
+En este ejemplo podemos ver que el primer job genera un artefacto estableciendolo con el directorio **build**, el cual contiene un archivo llamado somefile.txt y el segundo job toma este artefacto para leer el contenido del archivo resultante del primer job.
+
+Ahora que ya sabemos en que consiste un artefacto, vamos ahora a crear un despliegue automatizado con GitLab Pages, el cual nos permite crear sitios estaticos en internet, para eso creamos un repositorio con un index.html como por ejemplo:
+
+```
+<!DOCTYPE  html>
+<html  lang="en">
+<head>
+ <meta  charset="UTF-8">
+ <meta  name="viewport"  content="width=device-width, initial-scale=1.0">
+ <title>mi-sitio</title>
+</head>
+<body>
+ <h1>Este es mi sitio de ejemplo</h1>
+</body>
+</html>
+```
+
+y el siguiente archivo **.gitlab-ci.yml** que nos permitira desplegar automaticamente a GitLab Pages:
+
+```
+build_site:
+  stage:  build
+  script:
+    -  mkdir  public
+    -  cp  index.html  public/
+  artifacts:
+  paths:
+    -  public
+  pages:  true
+```
+
+Básicamente lo que hace esta configuración, es "compilar" nuestro proyecto y generar un directorio public con el cual se establece el artefacto y como se tiene habilitado el atributo **pages**, GitLab creará un segundo job que se encargue de tomar el artefacto **public** y desplegarlo en un servidor.
+
+De ahora en adelante, cada vez que exista un cambio en el contenido del index se desplegará automaticamente al servidor.
+
+> **Bonificación**: Modifique el archivo **.gitlab-ci.yml** para que el job solo se ejecute cuando dicho cambio se haya realizado en la rama principal del repositorio.
