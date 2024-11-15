@@ -162,7 +162,7 @@ GitLab toma la imagen de Ruby cuando no se indica el atributo image.
 
 ## Despliegue automatizado
 
-Es el proceso de implementar o actualizar aplicaciones, sitios web o servicios en un entorno de producción o de prueba de forma automática, sin intervención manual. Esta automatización se realiza utilizando herramientas de integración y entrega continuar (CI/CD) que se configuran para ejecutar una serie de pasos que toman el código más reciente y lo despliegan directamente en el entorno deseado.
+Es el proceso de implementar o actualizar aplicaciones, sitios web o servicios en un entorno de producción o de prueba de forma automática, sin intervención manual. Esta automatización se realiza utilizando herramientas de integración y entrega continua (CI/CD) que se configuran para ejecutar una serie de pasos que toman el código más reciente y lo despliegan directamente en el entorno deseado.
 
 Antes de ver un ejemplo práctico, vamos a ver en que consiste un artefacto.
 
@@ -230,3 +230,61 @@ Básicamente lo que hace esta configuración, es "compilar" nuestro proyecto y g
 De ahora en adelante, cada vez que exista un cambio en el contenido del index se desplegará automaticamente al servidor.
 
 > **Bonificación**: Modifique el archivo **.gitlab-ci.yml** para que el job solo se ejecute cuando dicho cambio se haya realizado en la rama principal del repositorio.
+
+## Gestión de incidencias y seguimiento de problemas
+GitLab proporciona herramientas integradas para la gestión de incidencias y el seguimiento de estos, que ayudan a los equipos de desarrollo y operaciones a colaborar efizcamente, realizar un seguimiento de los errores, gestionar tareas y planificar nuevas funcionalidades en proyectos.
+
+### Creación y gestión de problemas o incidentes (Issues)
+La creación y gestión de issues en GitLab es fundamental para mantener el control de incidencias, tareas y solicitudes de características en un proyecto. Esta funcionalidad permite estructurar, priorizar y detallar el trabajo, facilitando una colaboración del equipo de manera acertiva.
+
+#### Titulo y descripción:
+Al crear un issue, se especifica un titulo descriptivo y una descripción detallada que expliquye el problema, tarea o funcionalidad solicitada. La descripción puede incluir captruas de pantalla, ejemplos de código, enlaces y otros detalles que faciliten la compresión.
+
+#### Etiquetas (Labels):
+Los issues se pueden clasificar con etiquetas personalizables que reflejan la naturaleza y prioridad de cada issue, como  **type: bug**, **priority: high**, etc. Estas etiquetas ayudan a categorizar y priorizar el trabajo de acuerdo a las necesidades del proyecto.
+
+#### Milestones (Hitos):
+Se pueden asociar issues a hitos específicos, que representan objetivos a alcanzar en un periodo determinado, como un sprint o una versión. Esto ayuda a visualizar qué tareas son necesarias para cumplir con el hito.
+
+#### Listas de tareas:
+Dentro de un issue, es posible añadir listas de tareas (checklists) para desglosar el trabajo en pasos específicos. Esto es útil para seguir el progreso de tareas más complejas y mantener una vista organizada de las acciones pendientes.
+
+#### Vinculación con otros issues:
+GitLab permite vincular un issue con otros issue relacionados. Esto ayuda a identificar dependencias y entender cómo se relaciona el trabajo entre diferentes tareas.
+
+### Asignación y seguimiento de tareas
+Los issues también tienen unas caracteristicas propias que facilitan el seguimiento y actualización de estas. las cuales describimos a continuación:
+
+#### Asignación:
+Cada issue puede asignarse a un usuario responsable, estableciendo claramente quién se encargará de su resolución.
+
+#### Referencias a Merge Requests (MR):
+Los issues pueden enlazarse con Merge Requests que implementan la solución propuesta. Este enlace puede configurarse para que, al completar y fusionar el MR, el issue se cierra automáticamente. Esto proporciona un flujo de trabajo claro entre el seguimiento de incidencias y el desarrollo de soluciones.
+
+#### Discusiones y comentarios:
+En cada issue, los miembros del equipo pueden agregar comentarios para discutir el problema. Esto permite documentar la evolución de ideas y soluciones, y coordinar acciones necesarias para resolver el issue.
+
+#### Resolución de hilos de conversación:
+Los comentarios pueden organizarse en hilos y marcarse como resueltos cuando ya no es necesario discutirlos, manteniendo el issue enfocado y ordenado.
+
+#### Historial de actividades:
+GitLab guarda un registro de todas las actualizaciones realizadas en cada issue, desde cambios en etiquetas hasta el progreso en listas de tareas. Esto proporciona un historial completo que permite ver cómo ha evolucionado el issue desde su creación.
+
+#### Seguimiento de tiempo (Time tracking):
+GitLab permite estimar y registrar el tiempo trabajado en cada issue. Esto es útil para medir cuánto tiempo toma resolver problemas y ayuda en la planificación de futuros recursos.
+
+## Integración con herramientas de gestión de proyectos
+GitLab ofrece una integración fluida con diversas herramientas de gestión de proyectos que ayuda a los equipos a planificar, hacer seguimiento y colaborar eficazmente en sus proyectos. Estas integraciones pueden sincronizar issues, actualizar el estado de los proyectos y compartir información en tiempo real, mejorando la organización del trabajo y la visibilidad del progreso en los equipos. A continuación se presentan algunas de las principales integraciones de GitLab con herramientas de gestión de proyectos:
+
+### Jira:
+Sincroniza tickets de Jira con commits y MRs de GitLab, permitiendo que el flujo de trabajo en ambas plataformas se mantenga actualizado y refleje el progreso de desarrollo en los tickets.
+
+### Microsoft Teams y Slack:
+Envía notificaciones en tiempo real a canales específicos sobre actualizaciones en GitLab, como cambios en pipelines y creación de issues, para mantener al equipo informado y permitir interacción directa desde el chat.
+
+### Trello:
+Permite sincronizar issues de GitLab con tarjetas de Trello, facilitando la visualización del flujo de trabajo en un tablero de Trello mientras se desarrollan los cambios en GitLab.
+
+Existen muchas más herramientas de integración, pero hemos enumerados las más comunes.
+
+`Realizar un ejemplo práctico de la integración de Trello con GitLab`
